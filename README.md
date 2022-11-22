@@ -1091,3 +1091,152 @@ let arr = array.map(x => [x,x*2])
 console.log(arr) //  1,2,2,4,3,6,4,8,5,10
 ```
 
+## 13 Functions
+### 13.1 Functions
+
+A function is a block of code designed to perform a particular task.
+
+#### 13.1.1 Function Anatomy
+
+function keyword followed by its name  parenthesis containing a list of parameter name (a,b,c) and the function body enclosed in brackets.
+
+```javascript
+function greeting(message,greetingText = "Hi"){
+	return greetingText + " "+ message
+}
+let greet = greeting("How are you!")
+console.log(greet) // Hi How are you!
+```
+
+#### 13.1.2 Anonymous Functions
+
+Nameless or anonymous functions can be defined by using the same syntax but skipping the function name.
+
+```javascript
+let arr = [1,2,3,4,5]
+let arrReduce = arr.reduce(function(total,value,index,array){
+    return total + value
+},0)
+console.log(arrReduce) // 15
+```
+
+#### 13.1.3 Assigning Functions To Variables
+
+Anonymous functions can be assigned to a variable, making them named functions again.
+
+```javascript
+let greet = function(message,greetingText = "Hi"){
+	console.log(greetingText + " "+ message)
+}
+greet("How are you!") // Hi How are you!
+```
+
+### 13.2 Origin of this keyword
+
+The this keyword refers to an object.
+
+```javascript
+function print(){
+	console.log(this) /*
+Window {0: global, window: Window, self: Window, document: document, name: '', location: Location, …}
+*/
+}
+print() 
+```
+
+## 15 Arrow Functions
+
+**Arrow Functions**
+
+Arrow functions were introduced in ES6 and provide a slim syntax for creating function expressions.
+
+```javascript
+() => {};
+```
+
+Arrow function can assign them to a variable name.
+
+```javascript
+let fun_1 = () => {};
+
+// Call arrow function by its name
+fun_1()
+```
+
+**return keyword:**
+
+```javascript
+let fun_2 = {} => { return 1;}
+
+fun_2(); // 1
+```
+
+**return value without using return keyword**
+
+```javascript
+let fun_3 = () => 1;
+
+fun_3(); // 1
+```
+
+**Parameter without ()**
+
+```javascript
+let expression = e => e;
+
+expression(1); // 1
+```
+
+### 15.0.1 Arrow Function Anatomy
+
+Arrow functions do not have array-like arguments object. They also cannot be used as constructors.
+
+**Arguments**
+Pass arguments to an arrow function via parameters.
+
+```javascript
+let x = (arg1,arg2) => { console.log(arg1,arg2); };
+x(1,2) // 1, 2
+```
+
+**No this binding**
+
+Arrow functions do not bind this keyword. this equals in the outer scope.
+
+**No arguments object**
+
+The arguments object does not exist in arrow function scope, you will get a reference error if you try to access it:
+
+```javascript
+let a = () => {
+	console.log(arguments); // arguments is not defined
+}
+```
+
+**No Constructor**
+
+You can create and call a function but you can also use same function as an object constructor – together with new operator – to instantiate an object. The function itself becomes class definition.
+
+For this reason you would often hear it said that in JavaScript all functions are
+objects. After ES6 specification introduced arrow functions to the language this statement is no longer true. Arrow functions cannot be used as object constructors.
+
+**When classic and arrow functions are used as event callbacks**
+
+Inside the arrow function’s scope this property points to Window object.
+In classic ES5 function this property points to the target element that was clicked.
+
+**Inherited this Context**
+
+```javascript
+function Classic(){
+let B = () => {
+	console.log("Hello B()");
+	console.log(this);
+}
+document.addEventListener("click",B)
+}
+let object = new Classic(); // Hello B()
+[object Classic]
+```
+
+A new context is created when using new operator to instantiate an object. Any-thing called from within that object will have its own context.
