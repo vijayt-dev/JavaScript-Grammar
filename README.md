@@ -6,7 +6,7 @@
 Copying JSON representation of an existing object to your copy buffer.
 
 ```javascript
-let x = { propert: 1, prop1: 2, method: function(){} }
+let x = { prop1: 1, prop2: 2, method: function(){} }
 copy(x)
 ```
 
@@ -18,7 +18,7 @@ JSON string format does not support methods, only properties.
 It shows object properties and methods.
 
 ```javascript
-let x = { propert: 1, prop1: 2, method: function(){} }
+let x = { prop1: 1, prop2: 2, method: function(){} }
 console.dir(x)
 ```
 
@@ -617,7 +617,7 @@ Do use const to define constants.
 | +=  |  Concatenation |
 | +  |  Addition |
 
-###8.0.4 Comparison
+### 8.0.4 Comparison
 
 | operator  | name  |
 | ------------ | ------------ |
