@@ -1144,8 +1144,11 @@ Window {0: global, window: Window, self: Window, document: document, name: '', 
 print() 
 ```
 
-## 15 Arrow Functions
+## 14 Higher-order Functions
 
+A higher-order function is a function that either takes a function as one of its parameters or returns a function or both.
+
+## 15 Arrow Functions
 **Arrow Functions**
 
 Arrow functions were introduced in ES6 and provide a slim syntax for creating function expressions.
@@ -1170,7 +1173,6 @@ let fun_2 = {} => { return 1;}
 
 fun_2(); // 1
 ```
-
 **return value without using return keyword**
 
 ```javascript
@@ -1215,7 +1217,8 @@ let a = () => {
 
 **No Constructor**
 
-You can create and call a function but you can also use same function as an object constructor – together with new operator – to instantiate an object. The function itself becomes class definition.
+You can create and call a function
+but you can also use same function as an object constructor – together with new operator – to instantiate an object. The function itself becomes class definition.
 
 For this reason you would often hear it said that in JavaScript all functions are
 objects. After ES6 specification introduced arrow functions to the language this statement is no longer true. Arrow functions cannot be used as object constructors.
