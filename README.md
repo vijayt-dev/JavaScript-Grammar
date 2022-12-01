@@ -1243,3 +1243,345 @@ let object = new Classic(); // Hello B()
 ```
 
 A new context is created when using new operator to instantiate an object. Any-thing called from within that object will have its own context.
+
+## 19 Events
+
+### Events
+
+Events are functions executed at the time when a specific action occurs.
+
+Two types of events:
+1. Browser events.
+2. Synthetic events.
+
+### 19.0.1 Browser Events
+
+Built-in browser events are already pre-determined and executed by the browser when an action occurs. You don’t need to create them yourself, only to intercept them. When browser window changes size, a resize event is automatically dispatched.
+
+### 19.0.2 Synthetic Events
+#### Event Object
+
+```javascript
+let startEvent = new Event("start");
+document.addEventListener("start",function (event){
+},false)
+```
+
+#### dispatchEvent
+
+Once addEventListener fucntion is executed. The browser will be continuously listening for the "start" event to occur. But the callback remains dormant until event is actually dispatched using the dispatchEvent method.
+
+```javascript
+document.dispatchEvent(startEvent);
+```
+The dispatchEvent method actually triggers our custom ”start” event.
+
+#### removeEventListener
+
+Event listeners take memory and can affect performance of your program if there are too many listeners running at the same time. If we no longer need to listen for the event it’s a good idea to call removeEventListener method.
+
+```javascript
+function callback() {
+	console.log("Clicked");
+}
+document.addEventListener("click",callback);
+document.removeEventListener("click",callback);
+```
+
+Anonymous functions cannot be used to remove event listeners, so the following call will not remove the event listener.
+
+```javascript
+document.removeEventListener("click",function() { });
+```
+Whenever you use an anonymous function expression, it will occupy a new location in memory. This means removeEventListener will not be able to locate it among already existing callbacks.
+
+#### CustomEvent Object
+
+Events can carry additional data, specifying details of the event.
+
+```javascript
+let event = new CustomEvent("map",{
+	detail: {
+		x: 123,
+		y: 234
+	}
+});
+
+let callback = function(event) {
+	console.log(event);
+};
+
+document.addEventListener("map",callback);
+document.dispatchEvent(event)
+```
+#### Event Capture and Event Bubbling
+
+Event Bubbling down to top.
+Event Capturing top to down also known as trickling down.
+If you have Event capture as well as Event bubbling. W3C tells the event capture to event bubbling.
+It takes lot of memory.
+
+```javascript
+document.querySelector("#grandparent").addEventListener("click", () => {
+    console.log("Grandparent Clicked")
+},false)
+
+document.querySelector("#parent").addEventListener("click", () => {
+    console.log("Parent Clicked")
+},true)
+document.querySelector("#child").addEventListener("click", () => {
+    console.log("Child Clicked")
+},false)
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS</title>
+    <style>
+      div {
+        min-width: 100px;
+        min-height: 100px;
+        padding: 30px;
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JavaScript Web Page</h1>
+    <p id="para">This is a demo paragraph from this web page.</p>
+    <button id="clickMe">Click</button>
+
+    <div id="grandparent">
+      <div id="parent">
+        <div id="child">
+        </div>
+      </div>
+    </div>
+  <script src="app.js"></script> 
+  </body>
+</html>
+```
+### 19.0.4 setTimeout
+
+It execute the callback function after the delay.
+Resetting the timeout using clearTimeout function will cancel the event and
+prevent it from occurring in the future.
+
+```javascript
+let id = setTimeout(function() {
+	console.log("Hello");
+},1000);
+clearTimeout(id);
+```
+
+### 19.0.5 setInterval
+
+The setInterval function works exactly like setTimeout, except it will continue executing the callback function for an indefinite number of times at a time interval specified as its second argument.
+
+```javascript
+let id = setInterval(function() {
+	console.log("Hello");
+},1000);
+clearInterval(id);
+```
+
+## 21 Event Loop
+
+### How JS Engine Executes the Code using Call Stack
+
+One call stack at a time 1 thing can do.
+Inside a JS Engine have call stack.
+
+### Main Job of the Call Stack
+
+Whatever comes in the call stack it execute and it doesn’t wait for anything.
+
+### How does JavaScript perform async tasks
+
+The call stack doesn’t have a timer.
+
+### Behind the scenes in Browser
+
+Components
+
+1. Call Stack
+2. JS Engine
+3. Browser
+4. URL
+5. Video
+6. Web server
+7. Timer
+8. Bluetooth
+9. Geo location
+10. Local Storage
+
+### Web APIs
+
+The JavaScript engine access to web APIs through window global object.
+
+### How setTimeout Works behind the scenes in Browsers
+
+```javascript
+console.log("Start")
+setTimeout(function cb(){
+    console.log("Callback")
+},5000)
+console.log("End")
+```
+
+1. Print Start through console web API
+2. It register callback function in the Web API and start timer through setTimeout Web API
+3. Print End through console web API
+4. Global Execution context is pop in call stack
+5. While the timer is finished the call back function execute in the call stack
+
+### Event Loop & CallBack Queue or Task Queue
+
+When the timer is finished the callback function put into the callback queue.
+The event loop check it have anything in the callback queue if have the it take it from the callback queue put into the call stack.
+The call stack execute the callback function.
+The callback queue is cleared.
+The call stack is also cleared when the function is executed.
+Event loop mediator between the call stack and callback queue.
+
+### How Event Listeners Work
+
+```javascript
+console.log("Start")
+setTimeout(function cb(){
+    console.log("Callback")
+},5000)
+console.log("End")
+```
+
+1. Print Start through console web API
+2. It register callback function in the Web API
+3. Print End through console web API
+4. When the user click the callback function put into the callback queue.
+5. The event loop check the call stack is empty if empty the callback queue check it for then callback function put into the call stack
+6. Callback queue is vanished.
+
+### Why do we need Event Loop
+
+Lot more events happen the callback queue execute one after another
+
+### How fetch() function works
+
+This not work as setTimeout and DOM APIs.
+
+```javascript
+console.log("Start");
+
+setTimeout(function cbT() {
+	console.log("CB SetTimeout");
+}, 5000);
+fetch("https://api.netflix.com")
+.then(function cbf() {
+	console.log("CB Netflix");
+});
+console.log("End");
+```
+
+1. Print Start through console web API
+2. It register callback function and start timer in the Web API
+3. Fetch get data from the API then call the callback function and register in the Web API
+4. Print End through console web API
+5. While fetch is get data from the API it store in the microTask Queue it has higher priority, as same as callback queue
+6. While setTimeout function is finished is store in the callback queue
+7. The event loop first execute the microTask queue then callback queue
+8. Then microTask and callback queue is vanished
+
+### What are MicroTasks in JS
+
+Whatever comes in callback function in promise and mutation observer it comes in microTask queue.
+
+Mutation Observer keeps on check in mutation on DOM tree it execute the callback function.
+
+### Starvation of Functions is in Callback Queue
+
+If callback function create another microTask in microTask queue so on. The callback queue wait until the microTask queue is finished. The wait is called starvation.
+
+## 22 Call Stack
+
+The call stack is a place to keep track of currently executing functions. As your code executes, each call is placed on the call stack in order in which it appears in your program. Once the function returns it is removed from the call stack.
+
+### 22.1 Execution Context
+
+The call stack is a stack of execution contexts.
+
+#### What is Execution Context?
+
+It is contains the code that's currently running, and everything that aids in its execution.
+Note that the execution context is pointed to by this keyword in each scope. Not only function-scope either. Block-scope also carries with it a link to execution context via this keyword.
+
+It is just not used to access its properties or methods. Instead, it establishes a link between sections of code flow across multiple scopes.
+
+#### Root Execution Context
+
+When your program opens in a browser, an instance of a window object is created automatically. This window object becomes the root execution context, because it’s the first object instantiated by the browser’s JavaScript engine itself. The window object is the execution context of global scope – they refer to the same thing. The window object is an instance of Window class.
+
+### 22.2 Execution Context In Code
+
+#### 22.2.1 Window / Global Scope
+
+The window object is created,  A new lexical environment is created. It contains variable envrionment for that scope - a place in memory for storing your local variables.
+
+A new execution context is created when main window object is instantiated. The this keyword points to the window object
+
+#### 22.2.2 The Call Stack
+
+The call stack keeps track of function calls. If you call a function from context of the global scope, a new entry will be placed ”on top” of the current context. The newly created stack will inherit execution context from the previous environment.
+
+#### 22.2.3 .call(), .bind(), .apply()
+
+##### .call()
+The JavaScript Function call() method is used to call a function.
+
+```javascript
+function print() {
+    console.log(this.firstName + " " + this.lastName);
+  }
+const person1 = {
+  firstName:"John",
+  lastName: "Doe"
+}
+person.fullName.call(person1); //John Doe
+```
+
+##### .apply()
+It same as call() but different is The apply() method accepts arguments in an array:
+
+```javascript
+function print() {
+    console.log(this.firstName + " " + this.lastName + "," + city + "," + country);
+  }
+const person1 = {
+  firstName:"John",
+  lastName: "Doe"
+}
+person.fullName.call(person1,  ["Oslo", "Norway"]); // John Doe,Oslo,Norway
+```
+
+##### .bind()
+bind is a method on the prototype of all functions in JavaScript. It allows you to create a new function from an existing function, change the new function's this context, and provide any arguments you want the new function to be called with.
+
+```javascript
+function print() {
+    console.log(this.firstName + " " + this.lastName);
+  }
+const person1 = {
+  firstName:"John",
+  lastName: "Doe"
+}
+let fullName = person.fullName.bind(person1); // John Doe
+```
+
+#### 22.2.4 Stack Overflow
+
+A stack overflow occurs when there is a recursive function (a function that calls itself) without an exit point. The browser (hosting environment) has a maximum stack call that it can accomodate before throwing a stack error.
+Stack Overflow occurs when the memory required to build the call stack exceeds the address space allocated for the stack. This amount is determined and managed internally by the browser.
