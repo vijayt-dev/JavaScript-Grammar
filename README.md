@@ -1244,6 +1244,80 @@ let object = new Classic(); // Hello B()
 
 A new context is created when using new operator to instantiate an object. Any-thing called from within that object will have its own context.
 
+## 17 Prototype
+
+### 17.0.1 Prototype
+
+When a function is defined two things happen: the function object is created,
+because functions are objects. Then, a completely separate prototype object is
+created. The prototype property of the defined function will point to it.
+
+```javascript
+function Human(name) { }
+typeof Human.prototype // "object"
+```
+
+Human.prototype will point to the prototype object. This object has another
+property called constructor, which points back to the Human function.
+
+Human is a constructor function, used to create objects of type Human.
+
+Prototype property is not available on an instance of an object, only on the
+constructor function. On an instance, you can still access prototype via proto ,
+but should probably use static method Object.getPrototypeOf(instance) which
+returns the same prototype object as proto (in fact proto () is a getter.)
+
+### 17.0.2 Prototype on Object Literal
+
+```javascript
+let person = {
+	id: 1,
+	name:  'John Doe',
+}
+
+person.__proto__ // Object {}
+person.__proto__.constructor // f Object{}
+person.constructor // f Object {}
+```
+
+Internally it is wired into prototype as an object of type Object, even though it
+wasn’t created using the new operator.
+
+person.__proto__ point to Object.prototype.
+
+### 17.0.3 Prototype Link
+
+When an object is instantiated using new keyword, the constructor function exe-cutes to build the instance of that object.
+
+The instance of an object of type Object has proto property which points to the prototype object of the constructor from which it was instantiated.
+This three-way relationship between the Object, secondary prototype object that was created, and the instance of that object with proto pointing to Object’s
+prototype.
+This pattern represents just one link in a prototype chain of objects.
+
+### 17.0.5 Method look-up
+
+When you call Array.toString() what actually happens is, JavaScript will first look for method toString on the prototype of Array object. But it does not find it there. Next, JavaScript decides to look for toString method on the prototype
+property of Array’s parent class: Object.
+It finally finds Object.prototype.toString() and executes it.
+
+### 17.1 Parenting
+
+#### 17.1.2 constructor property
+
+The constructor property of Object class points to Function.
+The constructor property of Function class points to Function.
+
+#### 17.1.3 Function
+
+Function is the constructor of all object types.
+
+1. Object()
+2. Function()
+3. Array()
+4. Number()
+5. String()
+6. Custom()
+
 ## 19 Events
 
 ### Events
