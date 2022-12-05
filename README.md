@@ -1318,6 +1318,154 @@ Function is the constructor of all object types.
 5. String()
 6. Custom()
 
+## 18 Object Oriented Programming
+
+### What is OOP (Object-oriented Programming)?
+
+OOP is a programming paradigm that believes in grouping data (properties) and methods (actions) together inside a box.
+
+### Features of an Object-Oriented Language
+
+There are four rules or main pillars of Object-oriented programming language.
+
+1. Objects
+2. Classes
+3. Encapsulation
+4. Polymorphism
+
+#### Object
+
+An object is containing properties and methods. 
+
+#### Classes
+
+A class define th eblueprint of the object.
+
+#### Encapsulation
+
+Encapsulation wraps the data variables and data methods inside a singe unit. In encapsulation, we group data and actions together so that data can be secured.
+
+JavaScript implements encapsulation using two ways: Function Scope and Closures.
+
+**Function Scope**
+When we define a variable or a function inside the function, we can only access it from inside and not from outside the function. This can be one way of implementing abstraction. 
+
+```javascript
+function messageFunc(){
+    const message= "Hey there!"
+    console.log("Message from  inside: ",message);
+}
+messageFunc(); 
+console.log("Message from  outside: ",message);
+```
+**Closures**
+
+```javascript
+function messageFunc(){
+    const message = "Hey there!"
+    const displayMessage = function(){
+        console.log(message);
+    }
+    displayMessage();
+}
+
+messageFunc();
+console.log("Message from outside: ",message);
+```
+
+#### Abstraction
+
+Abstraction means hiding data.
+
+#### Inheritance
+
+One class inherit another class is called inheritance. Inheritance empowers us to reuse code efficiently.
+
+```javascript
+class Person { 
+    constructor(name) {
+        this.name = name;
+    }
+
+    welcome() {
+        console.log(`Hello ${this.name}`);
+    }
+}
+
+class Student extends Person {
+    constructor(name, rollNo){
+        super(name)
+        this.rollNo = rollNo
+    }
+}
+
+class Teacher extends Person {
+    constructor(name, teacherID){
+        super(name)
+        this.teacherID = teacherID
+    }
+}
+
+let student1 = new Student('Jack');
+student1.welcome();
+```
+
+#### super
+
+The super keyword is used to call the parent constructor.
+
+#### method overriding
+
+The inherited data variables and data methods can be overwritten. This is called Method Overriding. We can override the inherited data member by simply creating another with the same name in the child class and adding a new body to it.
+
+```javascript
+class Person { 
+    constructor(name) {
+        this.name = name;
+    }
+
+    welcome() {
+        console.log(`Hello ${this.name}`);
+    }
+}
+
+class Student extends Person {
+    constructor(name, rollNo){
+        super(name)
+        this.rollNo = rollNo
+    }
+    welcome(){
+        console.log(`Hello ${this.name}`)
+        console.log("You're a Student")
+    }
+}
+
+let student1 = new Student('Jack');
+student1.welcome();
+```
+
+This is how classes were defined before JavaScript started supporting the class keyword. That is before ES6 came up.
+
+```javascript
+function Student(first_name, last_name){
+    this.first_name = first_name
+    this.last_name = last_name
+}
+Student.prototype.display_full_name = function(){
+    return `${this.first_name} ${this.last_name}`
+}
+const student1 = new Student("Mary", "Green");
+const student2 = new Student("Lary", "Smith");
+console.log(student1.display_full_name());
+```
+
+#### Polymorphism
+
+Polymorphism is a concept used in the object-oriented paradigm that enables us to use the same function in different forms. This reduces repetition.
+
+
+
+
 ## 19 Events
 
 ### Events
